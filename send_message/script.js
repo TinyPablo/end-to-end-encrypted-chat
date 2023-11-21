@@ -1,10 +1,16 @@
+const address = "192.168.1.109:33000";
+
+
 document.addEventListener('DOMContentLoaded', () => {    
+  const usernameTextInput = document.getElementById("username");
+  const recipientTextInput = document.getElementById("recipient");
+  const messageTextarea = document.getElementById("message");
 
   $(document).ready(() => {
     function ajaxRequest(url, formData, successCallback) {
       $.ajax({
         type: "POST",
-        url: "http://192.168.1.109:33000/" + url,
+        url: "http://" + address + "/" + url,
         data: JSON.stringify(formData),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -13,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    $("#send_message_form").submit(function (event) {
+    $("#send_message_form").submit((event) => {
       event.preventDefault();
-      var payload = { username: $("#recipient").val() };
+      var payload = { username: recipientTextInput.value };
 
-      ajaxRequest("get_public_key_by_username", payload, (public_key_response) => { 
+      ajaxRequest("get_user_public_key", payload, (public_key_response) => { 
         const response = document.getElementById("response");
         response.innerHTML = JSON.stringify(public_key_response);
 
@@ -25,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           response.style = 'color: black';
           var recipient_public_key = public_key_response['message'];
-          const encrypted_message = encryptMessage(recipient_public_key, $("#message").val());
+          const encrypted_message = encryptMessage(recipient_public_key, messageTextarea.value);
 
           console.log('encrypted message:', encrypted_message);
 
           var formData = {
-            username: $("#username").val(),
-            recipient: $("#recipient").val(),
+            sender: usernameTextInput.value,
+            recipient: recipientTextInput.value,
             message: encrypted_message
           };
           ajaxRequest("send_message", formData, (res) => {

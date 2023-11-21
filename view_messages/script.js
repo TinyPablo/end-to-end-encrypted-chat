@@ -1,16 +1,20 @@
+const address = "192.168.1.109:33000";
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const loadPrivateKeyButton = document.getElementById('load_private_key');
-  const privateKeyTextarea = document.getElementById('private_key');
+  const privateKeyTextarea = document.getElementById('private_key');    
+  const usernameTextInput = document.getElementById("username");
 
-  loadPrivateKeyButton.addEventListener('click', function() {
+  loadPrivateKeyButton.addEventListener('click', () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.addEventListener('change', function(event) {
+    fileInput.addEventListener('change', (event) => {
       const selectedFile = event.target.files[0];
   
       const fileReader = new FileReader();
   
-      fileReader.addEventListener('load', function(fileEvent) {
+      fileReader.addEventListener('load', (fileEvent) => {
         const fileContent = fileEvent.target.result;
   
         privateKeyTextarea.value = fileContent;
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function ajaxRequest(url, formData, successCallback) {
         $.ajax({
             type: "POST",
-            url: "http://192.168.1.109:33000/" + url,
+            url: "http://" + address + "/" + url,
             data: JSON.stringify(formData),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -35,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    $("#view_messages_form").submit(function (event) {
+    $("#view_messages_form").submit((event) => {
         event.preventDefault();
         var formData = {
-          username: $("#username").val()
+          username: usernameTextInput.value
         };
 
         ajaxRequest("view_messages", formData, (res) => {
@@ -57,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
               for (let i = 0; i < response_text.length; i++)
               {
                 console.log('encrypted_message: ',response_text[i]['message']);
-                console.log('private key: ',privateKeyTextarea.value);
-                console.log('priv key value: ',$("#private_key").val())
-                response_text[i]['message'] = decryptMessage($("#private_key").val(), response_text[i]['message']);
+                console.log('private key: ', privateKeyTextarea.value);
+                console.log('priv key value: ', privateKeyTextarea.value)
+                response_text[i]['message'] = decryptMessage(privateKeyTextarea.value, response_text[i]['message']);
               }
               response.innerHTML = JSON.stringify(response_text);
               response.style = 'color: black';

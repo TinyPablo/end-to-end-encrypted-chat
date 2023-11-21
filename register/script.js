@@ -1,4 +1,8 @@
+const address = "192.168.1.109:33000";
+
+
 function encryptMessage(publicKey, message) {
+
   const publicKeyForge = forge.pki.publicKeyFromPem(publicKey);
   const encrypted = publicKeyForge.encrypt(message, 'RSA-OAEP', {
     md: forge.md.sha256.create(),
@@ -6,6 +10,7 @@ function encryptMessage(publicKey, message) {
   return forge.util.encode64(encrypted);  }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const usernameTextInput = document.getElementById("username");
   const generateKeysButton = document.getElementById('generate_keys');
   const copyPrivateKeyButton = document.getElementById('copy_private_key');
   const downloadPrivateKeyButton = document.getElementById('download_private_key');
@@ -28,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const blob = new Blob([privateKeyTextarea.value], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = $("#username").val() + '_private_key.txt';
+    a.download = usernameTextInput.value + '_private_key.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function ajaxRequest(url, formData, successCallback) {
       $.ajax({
           type: "POST",
-          url: "http://192.168.1.109:33000/" + url,
+          url: "http://" + address + "/" + url,
           data: JSON.stringify(formData),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
@@ -51,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
     $("#register_form").submit((event) => {
       event.preventDefault();
       var formData = {
-          username: $("#username").val(),
-          public_key: $("#public_key").val()
+          username: usernameTextInput.value,
+          public_key: publicKeyTextarea.value
       };
       ajaxRequest("register", formData, (res) => {
         const response = document.getElementById("response");
