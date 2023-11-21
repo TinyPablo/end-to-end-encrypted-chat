@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>end to end encrypted chat</title>
+  <script src="script.js" defer></script>
+  <script src="../jquery-3.6.4.min.js"></script>
+  <script src="../forge.min.js"></script>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <a href="../register/index.html"><button class="redirect_button">register</button></a>
+  <a href="../send_message/index.html"><button class="redirect_button">send message</button></a>
+  <a href="../view_messages/index.html" class="redirect_button"><button class="redirect_button">view messages</button></a>
+  <br>
+  <h2>view messages</h2>
+  <form id="view_messages_form">
+    <input type="text" id="username" name="username" placeholder="username" required>
+    <br>
+    
+
+    <input type="text" id="private_key" placeholder="private key" required>
+
+    <button type="button" id="load_private_key">load private key</button>
+    <br>
+
+    <button type="submit" type="submit">view messages</button>
+    <p id="response"></p>
+  </form>
+</body>
+</html>

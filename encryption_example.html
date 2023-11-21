@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encryption and Decryption</title>
+  <!-- Include crypto-js library from cdnjs -->
+  <script src="crypto-js.js"></script>
+</head>
+<body>
+  <script>
+    // Create message variable
+    const message = "messageo";
+
+    // Generate key pair
+    const keyPair = CryptoJS.RSA.generateKeyPair();
+
+    // Encrypt function
+    const encrypt = (message, publicKey) => {
+      const ciphertext = CryptoJS.RSA.encrypt(message, publicKey).toString();
+      return ciphertext;
+    };
+
+    // Decrypt function
+    const decrypt = (encryptedMessage, privateKey) => {
+      const bytes = CryptoJS.RSA.decrypt(encryptedMessage, privateKey);
+      const decryptedMessage = bytes.toString(CryptoJS.enc.Utf8);
+      return decryptedMessage;
+    };
+
+    // Extract public and private keys
+    const publicKey = keyPair.publicKey;
+    const privateKey = keyPair.privateKey;
+
+    // Encrypt message using public key
+    const encryptedMessage = encrypt(message, publicKey);
+    console.log("Encrypted Message:", encryptedMessage);
+
+    // Decrypt message using private key
+    const decryptedMessage = decrypt(encryptedMessage, privateKey);
+    console.log("Decrypted Message:", decryptedMessage);
+  </script>
+</body>
+</html>

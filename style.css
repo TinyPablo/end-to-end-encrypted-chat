@@ -1,0 +1,48 @@
+.key_textarea {
+    resize: none;
+    width: 25%;
+    height: 140px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+}
+
+body {
+    background-color: #f4f4f4;
+}
+
+h2 {
+    color: #333;
+}
+
+button, button.redirect_button {
+    background-color: #5bb34e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover, button.redirect_button:hover {
+    background-color: #4caf50;
+}
+
+label {
+    color: #555;
+}
+
+input, textarea {
+    width: 25%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+button.redirect_button {
+    background-color: #7c7c7c;
+}
+
+button.redirect_button:hover {
+    background-color: #6b6b6b;
+}

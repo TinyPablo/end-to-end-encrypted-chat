@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>end to end encrypted chat</title>
+  <script src="script.js" defer></script>
+  <script src="../jquery-3.6.4.min.js"></script>
+  <script src="../forge.min.js"></script>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <a href="../register/index.html"><button class="redirect_button">register</button></a>
+  <a href="../send_message/index.html"><button class="redirect_button">send message</button></a>
+  <a href="../view_messages/index.html" class="redirect_button"><button class="redirect_button">view messages</button></a>
+  <br>
+  <h2>register</h2>
+  <form id="register_form" method="post">
+    <input type="text" id="username" name="username" placeholder="username" required><br><br>
+
+    <button type="button" id="generate_keys">generate keys</button><br><br>
+
+    <textarea id="public_key" class="key_textarea" name="public_key" placeholder="public key" required></textarea>
+    <br>
+    
+    <textarea id="private_key" class="key_textarea" placeholder="private key" required></textarea>
+    <br>
+
+    <button type="button" id="copy_private_key">copy private key</button>
+    <button type="button" id="download_private_key">download private key</button>
+    <br><br>
+
+    <button type="submit">register</button>
+  </form>
+  <p id="response"></p>
+</body>
+</html>
