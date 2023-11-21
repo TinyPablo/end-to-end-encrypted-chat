@@ -1,4 +1,5 @@
-const address = "192.168.1.109:33000";
+// const address = "192.168.1.109:33000";
+const address = "178.235.194.75:33000";
 
 
 document.addEventListener('DOMContentLoaded', () => {    
@@ -59,13 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  function encryptMessage(publicKey, message) {
+    const formattedPublicKey = '-----BEGIN PUBLIC KEY-----\n' + publicKey + '\n-----END PUBLIC KEY-----';
+    const publicKeyForge = forge.pki.publicKeyFromPem(formattedPublicKey);
+  
+    const encrypted = publicKeyForge.encrypt(message, 'RSA-OAEP', {
+      md: forge.md.sha256.create(),
+    });
+  
+    return forge.util.encode64(encrypted);
+  }
 });
 
 
-function encryptMessage(publicKey, message) {
-  const publicKeyForge = forge.pki.publicKeyFromPem(publicKey);
-  const encrypted = publicKeyForge.encrypt(message, 'RSA-OAEP', {
-    md: forge.md.sha256.create(),
-  });
-  return forge.util.encode64(encrypted);  }
 

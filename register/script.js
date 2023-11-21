@@ -1,13 +1,6 @@
-const address = "192.168.1.109:33000";
+// const address = "192.168.1.109:33000";
+const address = "178.235.194.75:33000";
 
-
-function encryptMessage(publicKey, message) {
-
-  const publicKeyForge = forge.pki.publicKeyFromPem(publicKey);
-  const encrypted = publicKeyForge.encrypt(message, 'RSA-OAEP', {
-    md: forge.md.sha256.create(),
-  });
-  return forge.util.encode64(encrypted);  }
 
 document.addEventListener('DOMContentLoaded', () => {
   const usernameTextInput = document.getElementById("username");
@@ -78,9 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function generateKeyPair() {
     const rsa = forge.pki.rsa;
     const keyPair = rsa.generateKeyPair({ bits: 2048, e: 0x10001 });
+  
+    const publicKey = forge.pki.publicKeyToPem(keyPair.publicKey);
+    const privateKey = forge.pki.privateKeyToPem(keyPair.privateKey);
+  
+    const strippedPublicKey = publicKey.replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----|\r|\n/g, '');
+    const strippedPrivateKey = privateKey.replace(/-----BEGIN RSA PRIVATE KEY-----|-----END RSA PRIVATE KEY-----|\r|\n/g, '');
+  
     return {
-      publicKey: forge.pki.publicKeyToPem(keyPair.publicKey),
-      privateKey: forge.pki.privateKeyToPem(keyPair.privateKey)
-    }
+      publicKey: strippedPublicKey,
+      privateKey: strippedPrivateKey
+    };
   }
+  
 });
