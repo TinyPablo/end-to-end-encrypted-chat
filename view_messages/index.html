@@ -15,18 +15,27 @@
   <a href="../view_messages/index.html" class="redirect_button"><button class="redirect_button">view messages</button></a>
   <br>
   <h2>view messages</h2>
-  <form id="view_messages_form">
-    <input type="text" id="username" name="username" placeholder="username" required>
-    <br>
-    
+  <div id="form_div">
+    <form id="view_messages_form">
+      <div>
+        <input type="text" id="username" name="username" class="textInput" placeholder="username" required>
+        <br>
+        <a id="username_error" class="error">user</a>
+      </div>
 
-    <input type="text" id="private_key" placeholder="private key" required>
-
-    <button type="button" id="load_private_key">load private key</button>
-    <br>
-
-    <button type="submit" type="submit">view messages</button>
-    <p id="response"></p>
-  </form>
-</body>
+      <div>
+        <input type="text" id="private_key" placeholder="private key" class="textInput" required>
+        <button type="button" id="load_private_key">load</button>
+        <br>
+        <a id="private_key" class="error"></a>
+      </div>
+      
+      <div>
+        <button type="submit" type="submit">view messages</button>
+        <br>
+        <a id="responseMessage">resp</a>
+      </div>
+    </form>
+  </div>
+  </body>
 </html>

@@ -28,23 +28,31 @@ def root():
 def register():
     username = request.json['username']
     public_key = request.json['public_key']
+    verify_code = request.json['verify_code']
 
-    #username error handling
+    username = username.strip()
+
+    error = False
+    errorResponse = {'success': False, 'error': {}}
+
     if username in users:
-        return jsonify({'success': False, 'message': 'username is already taken'})
+        error = True
+        errorResponse['error']['username'] = 'username is already taken'
+    elif not username:
+        error = True
+        errorResponse['error']['username'] = 'username is empty'
+    elif ' ' in username:
+        error = True
+        errorResponse['error']['username'] = 'spaces are not allowed in username'
 
-    if not username.strip():
-        return jsonify({'success': False, 'message': 'incorrect public key'})
-
-    #public_key error handling
     if not public_key.strip():
-        return jsonify({'success': False, 'message': 'incorrect public key'})
-
+        error = True
+        errorResponse['error']['keys'] = 'public key is empty'
     
-    users[username] = {'public_key': public_key, 'messages': []}
-
-
-    print(f'register {username} {public_key}')
+    if error:
+        return jsonify(errorResponse)
+    
+    users[username] = {'public_key': public_key, 'verify_code': verify_code, 'messages': []}
     return jsonify({'success': True, 'message': 'account created'})
     
 @app.route('/send_message', methods=['POST'])
@@ -53,36 +61,41 @@ def send_message():
     recipient = request.json['recipient']
     message = request.json['message']
     
-    #sender error handling
+    error = False
+    errorResponse = {'success': False, 'error': {}}
+
     if sender not in users:
-        return jsonify({'success': False, 'message': 'invalid username'})
+        error = True
+        errorResponse['error']['sender'] = 'incorrect username'
 
-    #recipient error handling
     if recipient not in users:
-        return jsonify({'success': False, 'message': 'incorrect recipient'})
+        error = True
+        errorResponse['error']['recipient'] = 'incorrect recipient'
 
-    #message error handling
     if not message.strip():
-        return jsonify({'success': False, 'message': 'incorrect message'})
-    
+        error = True
+        errorResponse['error']['message'] = 'message is empty'
 
     users[recipient]['messages'].append({
         'sender': sender,
         'time': datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
-        
         'message': message})
 
-    
-    print(f'register {sender} {recipient} {message}')
-    return jsonify({'success': True, 'message': 'message send'})
+    if error:
+        return jsonify(errorResponse)
+
+    return jsonify({'success': True, 'message': 'message sent'})
 
 @app.route('/view_messages', methods=['POST'])
 def view_messages():
     username = request.json['username']
 
-    #username error handling
+    error = False
+    errorResponse = {'success': False, 'error': {}}
+
     if username not in users:
-        return jsonify({'success': False, 'message': 'invalid username'})
+        error = True
+        errorResponse['error']['username'] = 'invalid username'
     
     message = [
         {
@@ -92,9 +105,9 @@ def view_messages():
         }
         for msg in users[username]['messages']]
     
+    if error:
+        return jsonify(errorResponse)
 
-    
-    print(f'register {username}')
     return jsonify({'success': True, 'message': message})
 
 
@@ -102,15 +115,34 @@ def view_messages():
 def get_user_public_key():
     username = request.json['username']
 
-    #username error handling
-    if username not in users:
-        return jsonify({'success': False, 'message': 'invalid username'})
+    error = False
+    errorResponse = {'success': False, 'error': {}}
 
-    
-    print(f'register {username}')
+    if username not in users:
+        error = True
+        errorResponse['error']['username'] = 'invalid username'
+
+    if error:
+        return jsonify(errorResponse)
     
     return jsonify({'success': True, 'message': users[username]['public_key']})
 
+
+@app.route('/get_user_verify_code', methods=['POST'])
+def get_user_verify_code():
+    username = request.json['username']
+
+    error = False
+    errorResponse = {'success': False, 'error': {}}
+
+    if username not in users:
+        error = True
+        errorResponse['error']['username'] = 'invalid username'
+    
+    if error:
+        return jsonify(errorResponse)
+
+    return jsonify({'success': True, 'message': users[username]['verify_code']})
 
 with open('ip.txt') as f:
     ip, port = f.read().split(':')

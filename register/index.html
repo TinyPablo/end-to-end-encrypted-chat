@@ -15,23 +15,31 @@
   <a href="../view_messages/index.html" class="redirect_button"><button class="redirect_button">view messages</button></a>
   <br>
   <h2>register</h2>
-  <form id="register_form" method="post">
-    <input type="text" id="username" name="username" placeholder="username" required><br><br>
+  <div id="form_div">
+    <form id="register_form" method="post">
+      <div>
+        <input type="text" id="username" name="username" placeholder="username" class="textInput" required>
+        <a id="username_error" class="error"></a>
+        <br><br>
+      </div>
+      
+      <div>
+        <button type="button" id="generate_keys">generate keys</button>
+        <br>
+        <input type="text" id="public_key" name="public_key" placeholder="public key" class="textInput" required></textarea>
+        <br>
+        <input type="text" id="private_key" placeholder="private key" class="textInput" required></textarea>
+        <button type="button" id="copy_private_key">copy</button>
+        <button type="button" id="download_private_key">download</button>
+        <a id="keys_error" class="error"></a>
+      </div>
 
-    <button type="button" id="generate_keys">generate keys</button><br><br>
-
-    <textarea id="public_key" class="key_textarea" name="public_key" placeholder="public key" required></textarea>
-    <br>
-    
-    <textarea id="private_key" class="key_textarea" placeholder="private key" required></textarea>
-    <br>
-
-    <button type="button" id="copy_private_key">copy private key</button>
-    <button type="button" id="download_private_key">download private key</button>
-    <br><br>
-
-    <button type="submit">register</button>
-  </form>
-  <p id="response"></p>
-</body>
+      <div>
+        <button type="submit">register</button>
+        <br>
+        <a id="responseMessage"></a>
+      </div>
+    </form>
+  </div>
+  </body>
 </html>

@@ -1,6 +1,5 @@
 .key_textarea {
     resize: none;
-    width: 25%;
     height: 140px;
     padding: 10px;
     margin: 10px 0;
@@ -22,6 +21,8 @@ button, button.redirect_button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    padding: 9px 12px 9px 11px;
+    border-radius: 5px;
 }
 
 button:hover, button.redirect_button:hover {
@@ -33,7 +34,7 @@ label {
 }
 
 input, textarea {
-    width: 25%;
+    width: 40%;
     padding: 8px;
     margin: 5px 0;
     box-sizing: border-box;
@@ -45,4 +46,23 @@ button.redirect_button {
 
 button.redirect_button:hover {
     background-color: #6b6b6b;
+}
+
+.error {
+    color: red;
+}
+
+.textInput {
+    background-color: rgb(176, 176, 176);
+    /* background-color: rgb(255, 180, 180); */
+    border: 1px rgb(157, 157, 157) solid;
+}
+#form_div {
+    width: 75%;
+}
+
+button[type="submit"]
+{
+    margin-left: auto;
+    margin-right: auto;
 }

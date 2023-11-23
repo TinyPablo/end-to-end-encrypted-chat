@@ -15,13 +15,40 @@
   <a href="../view_messages/index.html" class="redirect_button"><button class="redirect_button">view messages</button></a>
   <br>
   <h2>send message</h2>
-  <form id="send_message_form">
-    <input type="text" id="username" name="username" placeholder="username" required><br>
-    <input type="text" id="recipient" name="recipient" placeholder="recipient" required><br>
-    <textarea id="message" name="message" placeholder="message" required></textarea><br>
-
-    <button type="submit">send</button>
-    <p id="response"></p>
-  </form>
+  <div id="form_div">
+    <form id="send_message_form">
+      <div>
+        <div>
+          <input type="text" id="username" name="username" placeholder="username" class="textInput" required>
+          <br>
+          <a id="username_error" class="error"></a>
+        </div>
+  
+        <div>
+          <input type="text" id="recipient" name="recipient" placeholder="recipient" class="textInput" required>
+          <br>
+          <a id="recipient_error" class="error"></a>
+        </div>
+      </div>
+      
+      <div>
+        <input type="text" id="private_key" placeholder="private key" class="textInput" required>
+        <button type="button" id="load_private_key">load</button>
+        <a id="private_key_error" class="error"></a>
+      </div>
+  
+      <div">
+        <textarea id="message" name="message" placeholder="message" class="textInput" required></textarea>
+        <br>
+        <a id="message_error" class="error"></a>
+      </div>
+      
+      <div>
+        <button type="submit">send</button>
+        <br>
+        <a id="responseMessage"></a>
+      </div>
+    </form>
+  </div>
 </body>
 </html>
