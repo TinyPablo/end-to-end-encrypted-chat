@@ -16,9 +16,9 @@
   <br>
   <h2>register</h2>
   <div id="form_div">
-    <form id="register_form" method="post">
+    <form id="register_form">
       <div>
-        <input type="text" id="username" name="username" placeholder="username" class="textInput" required>
+        <input type="text" id="username" name="username" placeholder="username" class="textInput">
         <a id="username_error" class="error"></a>
         <br><br>
       </div>
@@ -26,9 +26,9 @@
       <div>
         <button type="button" id="generate_keys">generate keys</button>
         <br>
-        <input type="text" id="public_key" name="public_key" placeholder="public key" class="textInput" required></textarea>
+        <input type="text" id="public_key" name="public_key" placeholder="public key" class="textInput"></textarea>
         <br>
-        <input type="text" id="private_key" placeholder="private key" class="textInput" required></textarea>
+        <input type="text" id="private_key" placeholder="private key" class="textInput"></textarea>
         <button type="button" id="copy_private_key">copy</button>
         <button type="button" id="download_private_key">download</button>
         <a id="keys_error" class="error"></a>
@@ -36,7 +36,6 @@
 
       <div>
         <button type="submit">register</button>
-        <br>
         <a id="responseMessage"></a>
       </div>
     </form>

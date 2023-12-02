@@ -30,20 +30,24 @@ def register():
     public_key = request.json['public_key']
     verify_code = request.json['verify_code']
 
-    username = username.strip()
-
     error = False
     errorResponse = {'success': False, 'error': {}}
 
     if username in users:
         error = True
         errorResponse['error']['username'] = 'username is already taken'
-    elif not username:
+    elif username != username.strip():
         error = True
-        errorResponse['error']['username'] = 'username is empty'
+        errorResponse['error']['username'] = 'username cannot begin or end with a space'
     elif ' ' in username:
         error = True
         errorResponse['error']['username'] = 'spaces are not allowed in username'
+    elif not 3 <= len(username) <= 20:
+        error = True
+        errorResponse['error']['username'] = 'length of username must be bewteen 3 and 20 characters'
+    elif not username:
+        error = True
+        errorResponse['error']['username'] = 'username is empty'
 
     if not public_key.strip():
         error = True
@@ -75,6 +79,10 @@ def send_message():
     if not message.strip():
         error = True
         errorResponse['error']['message'] = 'message is empty'
+    # elif len(message) > 190:
+    #     error = True
+    #     errorResponse['error']['message'] = 'message is too long (max 190 characters)'
+    
 
     users[recipient]['messages'].append({
         'sender': sender,
@@ -95,7 +103,7 @@ def view_messages():
 
     if username not in users:
         error = True
-        errorResponse['error']['username'] = 'invalid username'
+        errorResponse['error']['username'] = 'invalid recipient'
     
     message = [
         {

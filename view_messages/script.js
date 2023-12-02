@@ -1,92 +1,199 @@
 // const address = "192.168.1.109:33000";
 // const address = "178.235.194.75:33000";
-// const address = "10.40.31.195:33000";
-const address = "127.0.0.1:33000";
+// const address = "10.40.31.135:33000";
+// const address = "127.0.0.1:33000";
+const address = "192.168.1.108:33000";
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  const loadPrivateKeyButton = document.getElementById('load_private_key');
-  const privateKeyTextInput = document.getElementById('private_key');    
-  const usernameTextInput = document.getElementById("username");
 
-  
-  loadPrivateKeyButton.addEventListener('click', () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.addEventListener('change', (event) => {
-      const selectedFile = event.target.files[0];
-  
-      const fileReader = new FileReader();
-  
-      fileReader.addEventListener('load', (fileEvent) => {
-        const fileContent = fileEvent.target.result;
-  
-        privateKeyTextInput.value = fileContent;
-      });
-      fileReader.readAsText(selectedFile);
+const usernameTextInput = document.getElementById("username");
+const privateKeyTextInput = document.getElementById('private_key');
+
+const usernameError = document.getElementById('username_error');
+const privateKeyError = document.getElementById('private_key_error');
+const responseMessage = document.getElementById("responseMessage");
+
+const loadPrivateKeyButton = document.getElementById('load_private_key');
+
+
+const normalColor = 'background-color: rgb(176, 176, 176)';
+const errorColor = 'background-color:  rgb(255, 180, 180)';
+
+
+
+function resetResponseMessage(){
+  responseMessage.innerHTML = '';
+}
+function resetUsernameError(){
+  usernameError.innerHTML = '';
+  usernameTextInput.style = normalColor;
+}
+function resetPrivateKeyError(){
+  privateKeyError.innerHTML = '';
+  privateKeyTextInput.style = normalColor;
+}
+
+function setResponseMessage(message){
+  responseMessage.innerHTML = '<br>' + message;
+  return;
+}
+function setUsernameError(error){
+  usernameError.innerHTML = '<br>' + error;
+
+  usernameTextInput.style = errorColor;
+  resetResponseMessage();
+  remindOfErrors();
+}
+function setPrivateKeyError(error){
+  privateKeyError.innerHTML = '<br>' + error;
+
+  privateKeyTextInput.style = errorColor;
+  resetResponseMessage();
+  remindOfErrors();
+}
+
+function remindOfErrors(){
+  responseMessage.innerHTML = '<br>' + 'fix errors';
+  return;
+}
+
+
+usernameTextInput.addEventListener('input', () => {
+  resetUsernameError();
+});
+privateKeyTextInput.addEventListener('input', () => {
+  resetPrivateKeyError();
+});
+
+loadPrivateKeyButton.addEventListener('click', () => {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.addEventListener('change', (event) => {
+    const selectedFile = event.target.files[0];
+
+    const fileReader = new FileReader();
+
+    fileReader.addEventListener('load', (fileEvent) => {
+      const fileContent = fileEvent.target.result;
+
+      privateKeyTextInput.value = fileContent;
     });
-    fileInput.click();
-  });    
-          
-  $(document).ready(() => {
-    function ajaxRequest(url, formData, successCallback) {
-        $.ajax({
-            type: "POST",
-            url: "http://" + address + "/" + url,
-            data: JSON.stringify(formData),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
-            success: successCallback
-        });
-    }
+    fileReader.readAsText(selectedFile);
+  });
+  fileInput.click();
+});    
+        
+$(document).ready(() => {
+  function ajaxRequest(url, formData, successCallback) {
+      $.ajax({
+          type: "POST",
+          url: "http://" + address + "/" + url,
+          data: JSON.stringify(formData),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          headers: {
+              "Access-Control-Allow-Origin": "*"
+          },
+          success: successCallback
+      });
+  }
 
-    $("#view_messages_form").submit((event) => {
-        event.preventDefault();
+  $("#view_messages_form").submit((event) => {
+    event.preventDefault();
+    
+    resetUsernameError();
+    resetPrivateKeyError();
+    resetResponseMessage();
+
+    var verify_code_payload = { username: usernameTextInput.value };
+
+    ajaxRequest("get_user_verify_code", verify_code_payload, (verify_code_res) => {
+      var isPrivateKeyValid;
+
+      if (!verify_code_res['success']) {
+        if (verify_code_res['error']['username']) {
+          setUsernameError(verify_code_res['error']['username']);
+          return;
+        }
+      }
+
+        try
+        {
+          isPrivateKeyValid = decryptMessage(privateKeyTextInput.value, 
+          verify_code_res['message']) == usernameTextInput.value;
+        }
+        catch (error)
+        {
+          isPrivateKeyValid = false;
+        }
+
+        if (!isPrivateKeyValid) {
+          setPrivateKeyError('incorrect private key');
+          return;
+        }
+
         var formData = {
           username: usernameTextInput.value
         };
-
+  
         ajaxRequest("view_messages", formData, (res) => {
-            const response = document.getElementById("response");
-            console.log(res);
+          const response = document.getElementById("response");
+          
+          console.log('res:', res);
+          console.log('messages.length: ',res['message'].length)
 
-            response.innerHTML = JSON.stringify(res);
-            response.style = 'color: red';
-            
-            console.log('res:', res)
-            console.log('messages.length: ',res['message'].length)
+          if (res['success'])
+          {
+            var encryptedMessages = res['message'];
 
-            if (res['success'] && res['message'].length != 0)
-            {
-              var response_text = res['message'];
-              for (let i = 0; i < response_text.length; i++)
-              {
-                console.log('encrypted_message: ',response_text[i]['message']);
-                console.log('private key: ', privateKeyTextInput.value);
-                console.log('priv key value: ', privateKeyTextInput.value)
-                response_text[i]['message'] = decryptMessage(privateKeyTextInput.value, response_text[i]['message']);
-              }
-              response.innerHTML = JSON.stringify(response_text);
-              response.style = 'color: black';
+            for (let i = 0; i < res['message'].length; i++) {
+              encryptedMessages[i]['message'] = decryptMessage(privateKeyTextInput.value, res['message'][i]['message']);
             }
-        });
-    });
 
+            var encryptedMessagesString = '';
+            for (let i = 0; i < encryptedMessages.length; i++) {
+              encryptedMessagesString += `message: ${encryptedMessages[i]['message']}<br>
+              sender: ${encryptedMessages[i]['sender']}<br>
+              time: ${encryptedMessages[i]['time']}<br><br>
+              `;
+              setResponseMessage(encryptedMessagesString);
+            }
+          }
+        });
+      });
   });
 
-  function decryptMessage(privateKey, encryptedMessage) {
-    const formattedPrivateKey = '-----BEGIN PRIVATE KEY-----\n' + privateKey + '\n-----END PRIVATE KEY-----';
-    const privateKeyForge = forge.pki.privateKeyFromPem(formattedPrivateKey);
-  
-    const encrypted = forge.util.decode64(encryptedMessage);
-    const decrypted = privateKeyForge.decrypt(encrypted, 'RSA-OAEP', {
-      md: forge.md.sha256.create(),
-    });
-  
-    return decrypted;
-  }
 });
 
+
+function encryptMessage(publicKey, message) {
+    const formattedPublicKey = '-----BEGIN PUBLIC KEY-----\n' + publicKey + '\n-----END PUBLIC KEY-----';
+    const publicKeyForge = forge.pki.publicKeyFromPem(formattedPublicKey);
+  
+    var encryptedMessage = '';
+    const maxBlockLen = 190;
+    for (var i = 0; i < message.length; i += maxBlockLen) {
+        const block = message.substring(i, i + maxBlockLen);
+        const encryptedBlock = publicKeyForge.encrypt(block, 'RSA-OAEP', {
+        md: forge.md.sha256.create()
+        });
+        encryptedMessage += encryptedBlock;
+    }
+    return forge.util.encode64(encryptedMessage);
+}
+
+function decryptMessage(privateKey, encryptedMessage) {
+  const formattedPrivateKey = '-----BEGIN PRIVATE KEY-----\n' + privateKey + '\n-----END PRIVATE KEY-----';
+  const privateKeyForge = forge.pki.privateKeyFromPem(formattedPrivateKey);
+
+  encryptedMessage = forge.util.decode64(encryptedMessage);
+  var decryptedMessage = '';
+  const blockLen = 256;
+  for (let i = 0; i < encryptedMessage.length; i += blockLen) {
+      const currBlock = encryptedMessage.substring(i, i + blockLen);
+      decryptedMessage += privateKeyForge.decrypt(currBlock, 'RSA-OAEP', {
+          md: forge.md.sha256.create()
+      });
+  }
+  return decryptedMessage;
+}

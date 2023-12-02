@@ -18,22 +18,21 @@
   <div id="form_div">
     <form id="view_messages_form">
       <div>
-        <input type="text" id="username" name="username" class="textInput" placeholder="username" required>
-        <br>
-        <a id="username_error" class="error">user</a>
+        <input type="text" id="username" name="username" class="textInput" placeholder="username">
+        <a id="username_error" class="error"></a>
       </div>
 
       <div>
-        <input type="text" id="private_key" placeholder="private key" class="textInput" required>
+        <input type="text" id="private_key" placeholder="private key" class="textInput">
         <button type="button" id="load_private_key">load</button>
-        <br>
-        <a id="private_key" class="error"></a>
+        <a id="private_key_error" class="error"></a>
+        <br><br>
       </div>
       
       <div>
         <button type="submit" type="submit">view messages</button>
         <br>
-        <a id="responseMessage">resp</a>
+        <a id="responseMessage"></a>
       </div>
     </form>
   </div>

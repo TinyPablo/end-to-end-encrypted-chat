@@ -19,33 +19,29 @@
     <form id="send_message_form">
       <div>
         <div>
-          <input type="text" id="username" name="username" placeholder="username" class="textInput" required>
-          <br>
+          <input type="text" id="username" name="username" placeholder="username" class="textInput">
           <a id="username_error" class="error"></a>
         </div>
   
         <div>
-          <input type="text" id="recipient" name="recipient" placeholder="recipient" class="textInput" required>
-          <br>
+          <input type="text" id="recipient" name="recipient" placeholder="recipient" class="textInput">
           <a id="recipient_error" class="error"></a>
         </div>
       </div>
       
       <div>
-        <input type="text" id="private_key" placeholder="private key" class="textInput" required>
+        <input type="text" id="private_key" placeholder="private key" class="textInput">
         <button type="button" id="load_private_key">load</button>
         <a id="private_key_error" class="error"></a>
       </div>
   
       <div">
-        <textarea id="message" name="message" placeholder="message" class="textInput" required></textarea>
-        <br>
+        <textarea id="message" name="message" placeholder="message" class="textInput"></textarea>
         <a id="message_error" class="error"></a>
       </div>
       
       <div>
         <button type="submit">send</button>
-        <br>
         <a id="responseMessage"></a>
       </div>
     </form>
