@@ -57,9 +57,6 @@ button.redirect_button:hover {
     /* background-color: rgb(255, 180, 180); */
     border: 1px rgb(157, 157, 157) solid;
 }
-#form_div {
-    width: 75%;
-}
 
 button[type="submit"]
 {

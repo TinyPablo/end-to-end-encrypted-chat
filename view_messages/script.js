@@ -2,7 +2,7 @@
 // const address = "178.235.194.75:33000";
 // const address = "10.40.31.135:33000";
 // const address = "127.0.0.1:33000";
-const address = "192.168.1.108:33000";
+const address = "192.168.1.100:33000";
 
 
 
@@ -152,10 +152,10 @@ $(document).ready(() => {
 
             var encryptedMessagesString = '';
             for (let i = 0; i < encryptedMessages.length; i++) {
-              encryptedMessagesString += `message: ${encryptedMessages[i]['message']}<br>
+              encryptedMessagesString += `
               sender: ${encryptedMessages[i]['sender']}<br>
-              time: ${encryptedMessages[i]['time']}<br><br>
-              `;
+              time: ${encryptedMessages[i]['time']}<br>
+              message: ${encryptedMessages[i]['message']}<br><br>`;
               setResponseMessage(encryptedMessagesString);
             }
           }
