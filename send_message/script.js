@@ -1,8 +1,8 @@
 // const address = "192.168.1.109:33000";
-// const address = "178.235.194.75:33000";
+const address = "178.235.194.75:33000";
 // const address = "10.40.31.135:33000";
 // const address = "127.0.0.1:33000";
-const address = "192.168.1.100:33000";
+// const address = "192.168.1.100:33000";
 
   
 const usernameTextInput = document.getElementById("username");
